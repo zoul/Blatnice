@@ -1,0 +1,186 @@
+body {
+
+	font-size:		16px;
+	line-height:	21px;
+	
+	font-family:	Georgia, serif;
+	background:		url(img/paper.png);
+
+	margin-bottom:	50px;
+}
+
+h1 {
+	
+	display:		block;
+	margin:			0px;
+	padding:		0px;
+
+	text-indent:	-500ex;
+	overflow:		hidden;
+
+	background:		url(img/head.png);
+	width:			190px;
+	height:			90px;
+}
+
+/* Menu */
+
+#menu {
+	
+	position:		fixed;
+	left:			0px;
+	top:			0px;
+}
+
+#menu ul {
+	
+	list-style:		none;
+	margin:			0px;
+	padding:		0px;
+
+	background:		url(img/menu.png) 0px 0px;
+}
+
+#menu ul li {
+	
+	margin:			0px;
+	padding:		0px;
+}
+
+#menu ul a {
+	
+	display:		block;
+	width:			190px;
+	height:			38px;
+
+	background:		url(img/menu.png) -190px 0px;
+
+	text-indent:	-500ex;
+	overflow:		hidden;
+}
+
+a.info { background-position: -190px   0px !important; }
+a.foto { background-position: -190px -38px !important; }
+a.vids { background-position: -190px -76px !important; }
+
+body.info a.info { background: none !important; }
+body.foto a.foto { background: none !important; }
+body.vids a.vids { background: none !important; }
+
+/* Obsah */
+
+div.tab {
+	
+	margin-left:	200px;
+	margin-top:		 23px;
+
+	width:			660px;
+}
+
+body.jsworks div.tab { display:	none; }
+body.info #info { display: block; }
+body.foto #foto { display: block; }
+body.vids #vids { display: block; }
+
+a {
+	
+	color:			#DB1414;
+}
+
+a:visited {
+	
+	color:			#802525;
+}
+
+/* Fotogalerie */
+
+div.fotka {
+
+	float:			left;
+
+	margin-right:	20px;
+	margin-bottom:	20px;
+	padding:		10px;
+	
+	background:		rgb(240, 240, 240);
+	text-align:		center;
+}
+
+div.clear {
+	
+	clear:			both;
+}
+
+a img {
+	
+	border:			none;
+}
+
+/* Prohlizec fotek */
+
+#overlay {
+	
+	position:		fixed;
+	left:			20px;
+	top:			20px;
+	right:			20px;
+	bottom:			20px;
+	background:		url(img/overlay.png);
+	visibility:		hidden;
+}
+
+#header {
+	
+	position:		absolute;
+	background:		black;
+	left:			0px;
+	top:			0px;
+	right:			0px;
+	color:			white;
+	height:			7ex;
+}
+
+#header p {
+	
+	position:		absolute;
+	right:			20px;
+	padding:		0.3ex;
+}
+
+#footer {
+	
+	position:		absolute;
+	background:		black;
+	left:			0px;
+	bottom:			0px;
+	right:			0px;
+	color:			white;
+}
+
+#footer .controls {
+	
+	position:		absolute;
+	right:			40px;
+	bottom:			0.5ex;
+}
+
+#footer #label {
+	
+	padding:		0.5ex;
+	padding-left:	40px;
+}
+
+#footer a, #header a {
+	
+	color:			white;
+}
+
+#photo {
+	
+	text-align:		center;
+}
+
+#progressBar {
+	
+	color:			white;
+}
