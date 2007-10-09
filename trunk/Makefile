@@ -1,4 +1,4 @@
-.PHONY: all clean check init upload
+.PHONY: all clean init upload
 
 CP		= rsync -rC
 FOTKY	= $(wildcard fotky/*jpg)
@@ -14,10 +14,6 @@ build/nahledy/%.jpg: fotky/%.jpg
 	@echo Dělám náhled: $<
 	@cp $< $@
 	@mogrify -format jpg -thumbnail x150 $@
-
-check: all
-	find build/ -name '*.html' -exec xmllint --noout --valid {} \;
-	linkcheck `find build/ -name '*.html'`
 
 upload: all
 	@echo 
