@@ -8,7 +8,6 @@ all: init $(NAHLEDY)
 	$(CP) fotky build
 	$(CP) src/*.css src/index.html src/*.js src/img build
 	vlnka `find build -name '*.html'`
-	try svn info | grep "Last Changed" > build/REVISION
 
 build/nahledy/%.jpg: fotky/%.jpg
 	@echo Dělám náhled: $<
