@@ -125,6 +125,7 @@ a img {
 table {
 	
 	border-collapse:collapse;
+	table-layout:	fixed;
 	float:			left;
 	margin-right:	20px;
 	margin-bottom:	20px;
@@ -158,6 +159,11 @@ tr.m td, td.m {
 tr.v td, td.v { background:	rgb(200, 240, 200); }
 tr.p td, td.p { background:	rgb(240, 200, 200); }
 tr.c td, td.c {	background:	rgb(240, 240, 200); }
+
+td.l {
+	
+	border-right:	2px solid gray;
+}
 
 .clear {
 	
