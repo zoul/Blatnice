@@ -1,0 +1,179 @@
+#! /usr/bin/perl
+
+use strict;
+use warnings;
+
+use Getopt::Long;
+
+use constant PEEK_SIZE	=> 20;
+
+use constant ST_START 	=>  0;
+use constant ST_SCRIPT	=>  1;
+use constant ST_PHP	=>  2;
+use constant ST_TAG	=>  3;
+use constant ST_BOUND	=>  4;
+
+my $NBSP = " ";
+
+sub run_test {
+
+	$NBSP = "_";
+	print process(join("", <DATA>));
+	exit 0;
+}
+
+GetOptions("debug!" => sub { $NBSP = "_" }, "test" => \&run_test);
+exit if not @ARGV;
+
+sub process($) {
+
+	my $input = shift;
+	my $state = ST_START;
+
+	for (my $i = 0; $i < length $input; $i++) {
+
+		my $prefix = substr($input, $i, PEEK_SIZE);
+	
+		if (($state == ST_START) && ($prefix =~ /^<script/i)) {
+			$state = ST_SCRIPT;
+			next;
+		}
+
+		if (($state == ST_START) && ($prefix =~ /^<\?php/i)) {
+			$state = ST_PHP;
+			next;
+		}
+
+		if (($state == ST_START) && ($prefix =~ /^</)) {
+			$state = ST_TAG;
+			next;
+		}
+
+		if (($state == ST_SCRIPT) && ($prefix =~ /^<\/script>/i)) {
+			$state = ST_START;
+			next;
+		}
+
+		if (($state == ST_PHP) && ($prefix =~ /^\?>/)) {
+			$state = ST_START;
+			next;
+		}
+
+		if (($state == ST_TAG) && ($prefix =~ /^>/)) {
+			$state = ST_START;
+			next;
+		}
+
+		if (($state == ST_START) &&
+			(substr($input, $i-1,  1) =~ /[\n\s$NBSP]/) &&
+			(substr($input, $i  , 40) =~ /^([uioaskzv])([ \n])(\s*)/i)) {
+
+			if ($2 eq ' ') { 	
+			
+				# Nahrazujeme mezeru uvnitř řádku
+				substr($input, $i, 2) = "$1$NBSP";
+				
+			} else {		
+			
+				# Přetahujeme předložku z konce řádku
+				substr($input, $i, 40) =~ s/(.)([ \n])(\s*)/\n$3$1$NBSP/;
+			}
+		}
+	}
+	
+	return $input;
+}
+
+for my $file (@ARGV) {
+
+	if (not -f $file) {
+		warn "Není soubor: $file, přeskakuji";
+		next;
+	}
+
+	open(FILE, $file) or warn "Nemůžu otevřít $file ($!), přeskakuji";
+	my $content = do { local $/; <FILE> };
+	close(FILE);
+	
+	open(RESULT, ">$file.tmp") or die "Nemůžu založit dočasný soubor: $!";
+	print RESULT process($content);
+	close(RESULT);
+	
+	rename("$file.tmp", $file);
+}
+
+=head1 JMÉNO
+
+vlnka – automatické přetahování předložek v HTML dokumentech
+
+=head1 POUŽITÍ
+
+vlnka [--test] [--debug] <vstupní soubory>
+
+Změny jsou provedeny na místě (vstupní soubory jsou novou verzí přepsány),
+takže důrazně doporučuju pouštět vlnku jen na kopii původních souborů.
+
+Program zadané HTML soubory projde a přetahá v nich jednopísmenné předložky.
+Jinými slovy pokud je někde v dokumentu předložka (například k), za kterou
+následuje mezera, program mezeru za předložkou nahradí nezlomitelnou mezerou.
+
+Program se vyhýbá vnitřku značek (takže nenahrazuje například v hodnotách
+atributů), obsahu značky <script> a obsahu konstrukce <?php…?>. Umí přetahovat
+i předložky z konce řádků.
+
+V ladicím režimu (C<--debug>) program místo nezlomitelné mezery vkládá
+podtržítko (_), takže si člověk může vyzkoušet, jestli někde nešidí.
+
+Parametrem C<--test> se zapne testovací režim, při kterém skript přetáhne
+předložky ve vestavěném testovacím HTML dokumentu a výsledek vypíše na
+obrazovku. Tenhle režim se hodí prakticky jen při úpravách skriptu, aby měl
+člověk jistotu, že nepodělal některý ze standardních případů.
+
+=head1 AUTOR
+
+zoul <zoul@davi.cz>
+
+=cut
+
+__DATA__
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="cs" xml:lang="cs">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Test přetahování předložek</title>
+	</head>
+<body>
+
+<script type="text/javascript">
+var i = 5; // Tady by k přetažení nemělo
+</script>
+
+<h1>Přetahování předložek</h1>
+
+<?php
+print "<p>V PHP skriptech by k přetahování docházet nemělo.</p>";
+?>
+
+<p>
+Předložky chceme přetahovat jen v textu, tedy nikoliv například <span
+title="v atributech, například tady">v atributech značek</span> nebo uvnitř
+značky <code>script</code>. Nahrazení by mělo proběhnout i u předložek, které
+jsou na konci řádku, kde to možná bude dělat trochu problémy. Ještě pár slov, a
+už může přijít ukázka předložky přetažené z konce řádku.
+</p>
+
+<p>
+	A ještě by mělo bez problémů fungovat i přetahování předložek v
+	odsazeném textu, odsazení se musí zachovat.
+</p>
+
+<p>
+(Přetahování je vidět spíš ze zdrojového souboru než z textu zobrazeného
+prohlížečem. Jestli chceš vidět výsledek přetahování předložek v prohlížeči,
+zkus si pomalu zužovat okno prohlížeče.)
+</p>
+
+</body>
+</html>

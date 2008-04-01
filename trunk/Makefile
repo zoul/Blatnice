@@ -1,8 +1,7 @@
-.PHONY: all clean init upload
-
-CP		= rsync -rC
-FOTKY	= $(wildcard fotky/*jpg)
-NAHLEDY	= $(patsubst fotky/%.jpg, build/nahledy/%.jpg, $(FOTKY))
+PATH := ./bin:${PATH}
+FOTKY = $(wildcard fotky/*jpg)
+NAHLEDY = $(patsubst fotky/%.jpg, build/nahledy/%.jpg, $(FOTKY))
+CP = rsync -rC
 
 all: init $(NAHLEDY)
 	$(CP) fotky build
@@ -20,8 +19,8 @@ upload: all
 	@echo "*** upload funguje automaticky. Na výzvě pro heslo se to"
 	@echo "*** na chvilku zarazí, ale to je normální; nic nezadávej."
 	@echo 
-	@rsync-wrapper "HLw3Rv5K" rsync -pvtrl \
-		build/ blatnice_eu@www.blatnice.eu:blatnice.eu
+	@echo Heslo: HLw3Rv5K
+	rsync -pvtrl build/ blatnice_eu@www.blatnice.eu:blatnice.eu
 
 clean:
 	rm -rf build/
