@@ -4,7 +4,8 @@ NAHLEDY = $(patsubst fotky/%.jpg, build/nahledy/%.jpg, $(FOTKY))
 CP = rsync -rC
 
 all: init $(NAHLEDY)
-	$(CP) fotky video build
+	ln -sf ../fotky build/
+	ln -sf ../video build/
 	$(CP) src/*.css src/index.html src/*.js src/img build
 	vlnka `find build -name '*.html'`
 
@@ -19,7 +20,7 @@ upload: all
 	@echo "*** upload funguje automaticky. Na výzvě pro heslo se to"
 	@echo "*** na chvilku zarazí, ale to je normální; nic nezadávej."
 	@echo 
-	rsync -pvtrl --delete build/ nemesis:sites/blatnice.eu
+	rsync -pvtrlL --cvs-exclude --delete build/ nemesis:sites/blatnice.eu
 
 clean:
 	rm -rf build/
