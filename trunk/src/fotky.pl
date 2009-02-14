@@ -23,6 +23,7 @@ chata:Velká chata
 chatka:Malá chata
 chatky:Malé chatky v horní řadě
 coufalka:„Coufalka“
+zachod:Nové záchody
 horni-hriste-1:Horní hřiště
 horni-hriste-2:Horní hřiště shora
 gol:Horní hřiště v akci
@@ -38,9 +39,9 @@ zadni-hriste:Zadní hřiště
 rybnik-1:Rybník I
 rybnik-2:Rybník s plachetnicí
 rybnik-3:Rybník III
+voda:Rybník v akci
 hrib:Takové tu běžně rostou
 snek:Vodní živočich z jiného rybníka
-syslov:V přilehlých lesích se najde leccos
-vazka-1:Vážka I
-vazka-2:Vážka II
-vodomerka:Vodoměrka
+vodnik:V přilehlých lesích se najde leccos
+vazka:Vážka
+kanoe:Jedna z dvou kánoí v akci
