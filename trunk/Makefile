@@ -5,7 +5,6 @@ CP = rsync -rC
 
 all: init $(NAHLEDY)
 	ln -sf ../fotky build/
-	ln -sf ../video build/
 	$(CP) src/*.css src/index.html src/*.js src/img build
 	vlnka `find build -name '*.html'`
 
