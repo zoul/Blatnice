@@ -12,7 +12,7 @@ build/nahledy/%.jpg: fotky/%.jpg
 	@mogrify -format jpg -thumbnail x150 $@
 
 upload: all
-	rsync -pvtrlL --cvs-exclude --delete build/ brewers:sites/blatnice.eu
+	rsync -pvtrlL --cvs-exclude --delete build/ cirdan:websites/blatnice.eu
 
 clean:
 	rm -rf build/
