@@ -1,3 +1,0 @@
-Galerie:
-	Odlišit odkazy na prvním a posledním?
-	Odstranit focus rámeček ve Firefoxu?
